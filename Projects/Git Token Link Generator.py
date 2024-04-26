@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from os import system
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -53,6 +54,8 @@ class MainWindow(QWidget):
     def createToken(self):
         repo = self.repo_entry.text()
         token = self.token_entry.text()
+        if not token and not repo:
+            return
         index = repo.rfind('github.com')
         
         full = ''
@@ -61,6 +64,14 @@ class MainWindow(QWidget):
             full += char
             if i == index - 1:
                 full += token + '@'
+        repo_name = repo[repo.rfind('/') + 1:repo.rfind('.')]
+        try:
+            file = open(f'Tokens\\{repo_name}.txt', 'w')
+        except FileNotFoundError:
+            system('mkdir Tokens')
+            file = open(f'Tokens\\{repo_name}.txt', 'w')
+        finally:
+            file.write(f'Repo Link: {repo}\nGithub Token: {token}\nRepo Name: {repo_name}\nGit Token: {full}\n')
         self.output_entry.setEnabled(True)
         self.output_entry.setText(full)
         
