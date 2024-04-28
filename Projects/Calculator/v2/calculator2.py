@@ -1246,6 +1246,12 @@ class Ui_MainWindow(object):
 
     def pdel(self):
         self.lcd.backspace()
+        try:
+            self.labeltext = self.labeltext[:-1]
+        except IndexError:
+            self.labeltext = ''
+        finally:
+            self.label.setText(self.labeltext)
     def pclear(self):
         self.lcd.clear()
         self.labeltext = ''
